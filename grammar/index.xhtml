@@ -1,0 +1,222 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+      <meta name="generator" content="Railroad Diagram Generator 2.0" />
+      <style type="text/css">
+    ::-moz-selection
+    {
+      color: #FFFCF0;
+      background: #0F0C00;
+    }
+    ::selection
+    {
+      color: #FFFCF0;
+      background: #0F0C00;
+    }
+    body
+    {
+      font: normal 12px Verdana, sans-serif;
+      color: #0F0C00;
+      background: #FFFCF0;
+    }
+    .ebnf a
+    {
+      text-decoration: none;
+    }
+    .ebnf a:hover
+    {
+      color: #050400;
+      text-decoration: underline;
+    }
+    .signature
+    {
+      color: #806600;
+      font-size: 11px;
+      text-align: right;
+    }
+    a:link, a:visited
+    {
+      color: #0F0C00;
+    }
+    a:link.signature, a:visited.signature
+    {
+      color: #806600;
+    }
+    div.ebnf
+    {
+      padding: 10px;
+      background: #FFF6D1;
+      width: 992px;
+    }
+    .ebnf div
+    {
+      padding-left: 13ch;
+      text-indent: -13ch;
+    }
+    .ebnf code
+    {
+      font:12px SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+    }
+  </style>
+   </head>
+   <body>
+      <p style="font-size: 14px; font-weight:bold"><a name="Program">Program:</a></p><img border="0" src="diagram/Program.svg" height="37" width="737" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#Program" title="Program">Program</a>  ::= 'VAR' <a href="#ListOfVariables" title="ListOfVariables">ListOfVariables</a> ':' 'INTEGER' ';' 'BEGIN' <a href="#ListOfAssignments" title="ListOfAssignments">ListOfAssignments</a> 'END'</div></code></div>
+      </p>
+      <p>no references</p><br /><p style="font-size: 14px; font-weight:bold"><a name="ListOfVariables">ListOfVariables:</a></p><img border="0" src="diagram/ListOfVariables.svg" height="81" width="177" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#ListOfVariables" title="ListOfVariables">ListOfVariables</a></div>
+               <div>         ::= <a href="#Identifier" title="Identifier">Identifier</a> ( ',' <a href="#Identifier" title="Identifier">Identifier</a> )*</div></code></div>
+      </p>
+      <p>referenced by:
+         
+         <ul>
+            <li><a href="#OPERATOR_READ" title="OPERATOR_READ">OPERATOR_READ</a></li>
+            <li><a href="#OPERATOR_WRITE" title="OPERATOR_WRITE">OPERATOR_WRITE</a></li>
+            <li><a href="#Program" title="Program">Program</a></li>
+         </ul>
+      </p><br /><p style="font-size: 14px; font-weight:bold"><a name="Identifier">Identifier:</a></p><img border="0" src="diagram/Identifier.svg" height="53" width="157" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#Identifier" title="Identifier">Identifier</a></div>
+               <div>         ::= <a href="#Letter" title="Letter">Letter</a>+</div></code></div>
+      </p>
+      <p>referenced by:
+         
+         <ul>
+            <li><a href="#Assignment" title="Assignment">Assignment</a></li>
+            <li><a href="#ListOfVariables" title="ListOfVariables">ListOfVariables</a></li>
+            <li><a href="#OPERATOR_FOR" title="OPERATOR_FOR">OPERATOR_FOR</a></li>
+            <li><a href="#Operand" title="Operand">Operand</a></li>
+         </ul>
+      </p><br /><p style="font-size: 14px; font-weight:bold"><a name="Letter">Letter:</a></p><img border="0" src="diagram/Letter.svg" height="169" width="131" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#Letter" title="Letter">Letter</a>   ::= 'A'</div>
+               <div>           | 'B'</div>
+               <div>           | '...'</div>
+               <div>           | 'Z'</div></code></div>
+      </p>
+      <p>referenced by:
+         
+         <ul>
+            <li><a href="#Identifier" title="Identifier">Identifier</a></li>
+         </ul>
+      </p><br /><p style="font-size: 14px; font-weight:bold"><a name="ListOfAssignments">ListOfAssignments:</a></p><img border="0" src="diagram/ListOfAssignments.svg" height="53" width="193" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#ListOfAssignments" title="ListOfAssignments">ListOfAssignments</a></div>
+               <div>         ::= <a href="#Assignment" title="Assignment">Assignment</a>+</div></code></div>
+      </p>
+      <p>referenced by:
+         
+         <ul>
+            <li><a href="#Program" title="Program">Program</a></li>
+         </ul>
+      </p><br /><p style="font-size: 14px; font-weight:bold"><a name="Assignment">Assignment:</a></p><img border="0" src="diagram/Assignment.svg" height="37" width="341" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#Assignment" title="Assignment">Assignment</a></div>
+               <div>         ::= <a href="#Identifier" title="Identifier">Identifier</a> '=' <a href="#Expression" title="Expression">Expression</a> ';'</div></code></div>
+      </p>
+      <p>referenced by:
+         
+         <ul>
+            <li><a href="#ListOfAssignments" title="ListOfAssignments">ListOfAssignments</a></li>
+         </ul>
+      </p><br /><p style="font-size: 14px; font-weight:bold"><a name="Expression">Expression:</a></p><img border="0" src="diagram/Expression.svg" height="69" width="259" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#Expression" title="Expression">Expression</a></div>
+               <div>         ::= '-'? <a href="#Subexpression" title="Subexpression">Subexpression</a></div></code></div>
+      </p>
+      <p>referenced by:
+         
+         <ul>
+            <li><a href="#Assignment" title="Assignment">Assignment</a></li>
+            <li><a href="#OPERATOR_FOR" title="OPERATOR_FOR">OPERATOR_FOR</a></li>
+            <li><a href="#Subexpression" title="Subexpression">Subexpression</a></li>
+         </ul>
+      </p><br /><p style="font-size: 14px; font-weight:bold"><a name="Subexpression">Subexpression:</a></p><img border="0" src="diagram/Subexpression.svg" height="125" width="483" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#Subexpression" title="Subexpression">Subexpression</a></div>
+               <div>         ::= '(' <a href="#Expression" title="Expression">Expression</a> ')'</div>
+               <div>           | <a href="#Operand" title="Operand">Operand</a></div>
+               <div>           | <a href="#Subexpression" title="Subexpression">Subexpression</a><a href="#BinaryOperator" title="BinaryOperator">BinaryOperator</a><a href="#Subexpression" title="Subexpression">Subexpression</a></div></code></div>
+      </p>
+      <p>referenced by:
+         
+         <ul>
+            <li><a href="#Expression" title="Expression">Expression</a></li>
+            <li><a href="#Subexpression" title="Subexpression">Subexpression</a></li>
+         </ul>
+      </p><br /><p style="font-size: 14px; font-weight:bold"><a name="Operand">Operand:</a></p><img border="0" src="diagram/Operand.svg" height="81" width="177" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#Operand" title="Operand">Operand</a>  ::= <a href="#Identifier" title="Identifier">Identifier</a></div>
+               <div>           | <a href="#Constant" title="Constant">Constant</a></div></code></div>
+      </p>
+      <p>referenced by:
+         
+         <ul>
+            <li><a href="#Subexpression" title="Subexpression">Subexpression</a></li>
+         </ul>
+      </p><br /><p style="font-size: 14px; font-weight:bold"><a name="BinaryOperator">BinaryOperator:</a></p><img border="0" src="diagram/BinaryOperator.svg" height="125" width="129" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#BinaryOperator" title="BinaryOperator">BinaryOperator</a></div>
+               <div>         ::= '+'</div>
+               <div>           | '-'</div>
+               <div>           | '*'</div></code></div>
+      </p>
+      <p>referenced by:
+         
+         <ul>
+            <li><a href="#Subexpression" title="Subexpression">Subexpression</a></li>
+         </ul>
+      </p><br /><p style="font-size: 14px; font-weight:bold"><a name="Constant">Constant:</a></p><img border="0" src="diagram/Constant.svg" height="53" width="147" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#Constant" title="Constant">Constant</a> ::= <a href="#Digit" title="Digit">Digit</a>+</div></code></div>
+      </p>
+      <p>referenced by:
+         
+         <ul>
+            <li><a href="#Operand" title="Operand">Operand</a></li>
+         </ul>
+      </p><br /><p style="font-size: 14px; font-weight:bold"><a name="Digit">Digit:</a></p><img border="0" src="diagram/Digit.svg" height="169" width="131" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#Digit" title="Digit">Digit</a>    ::= '0'</div>
+               <div>           | '1'</div>
+               <div>           | '...'</div>
+               <div>           | '9'</div></code></div>
+      </p>
+      <p>referenced by:
+         
+         <ul>
+            <li><a href="#Constant" title="Constant">Constant</a></li>
+         </ul>
+      </p><br /><p style="font-size: 14px; font-weight:bold"><a name="OPERATOR_READ">OPERATOR_READ:</a></p><img border="0" src="diagram/OPERATOR_READ.svg" height="37" width="341" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#OPERATOR_READ" title="OPERATOR_READ">OPERATOR_READ</a></div>
+               <div>         ::= 'READ' '(' <a href="#ListOfVariables" title="ListOfVariables">ListOfVariables</a> ')'</div></code></div>
+      </p>
+      <p>no references</p><br /><p style="font-size: 14px; font-weight:bold"><a name="OPERATOR_FOR">OPERATOR_FOR:</a></p><img border="0" src="diagram/OPERATOR_FOR.svg" height="37" width="849" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#OPERATOR_FOR" title="OPERATOR_FOR">OPERATOR_FOR</a></div>
+               <div>         ::= 'FOR' <a href="#Identifier" title="Identifier">Identifier</a> '=' <a href="#Expression" title="Expression">Expression</a> 'TO' <a href="#Expression" title="Expression">Expression</a> 'DO' <a href="#ListOfStatements" title="ListOfStatements">ListOfStatements</a> 'END_FOR'</div></code></div>
+      </p>
+      <p>no references</p><br /><p style="font-size: 14px; font-weight:bold"><a name="OPERATOR_WRITE">OPERATOR_WRITE:</a></p><img border="0" src="diagram/OPERATOR_WRITE.svg" height="37" width="351" /><p>
+         <div class="ebnf"><code>
+               <div><a href="#OPERATOR_WRITE" title="OPERATOR_WRITE">OPERATOR_WRITE</a></div>
+               <div>         ::= 'WRITE' '(' <a href="#ListOfVariables" title="ListOfVariables">ListOfVariables</a> ')'</div></code></div>
+      </p>
+      <p>no references</p><br /><hr />
+      <p>
+         <table border="0" class="signature">
+            <tr>
+               <td style="width: 100%"> </td>
+               <td valign="top">
+                  <nobr class="signature">... generated by <a name="Railroad-Diagram-Generator" class="signature" title="https://www.bottlecaps.de/rr/ui" href="https://www.bottlecaps.de/rr/ui" target="_blank">RR - Railroad Diagram Generator</a></nobr>
+               </td>
+               <td><a name="Railroad-Diagram-Generator" title="https://www.bottlecaps.de/rr/ui" href="https://www.bottlecaps.de/rr/ui" target="_blank"><img border="0" src="diagram/Railroad-Diagram-Generator.svg" height="16" width="16" /></a></td>
+            </tr>
+         </table>
+      </p>
+   </body>
+</html>

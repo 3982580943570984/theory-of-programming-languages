@@ -1,0 +1,23 @@
+<Program>                     ::= <Variable Declaration> <Description of Computations>
+
+<Variable Declaration>        ::= VAR <List of Variables> : INTEGER ;
+<List of Variables>           ::= <Identifier> | <Identifier>,<List of Variables>
+<Identifier>                  ::= <Letter> <Identifier> | <Letter>
+<Letter>                      ::= A | B | ... | Z
+
+<Description of Computations> ::= BEGIN <List of Assignments> END
+<List of Assignments>         ::= <Assignment> | <Assignment> <List of Assignments>
+<Assignment>                  ::= <Identifier> = <Expression>;
+<Identifier>                  ::= <Letter> <Identifier> | <Letter>
+<Expression>                  ::= <Unary Operator> <Subexpression> | <Subexpression>
+<Unary Operator>              ::= -
+<Subexpression>               ::= (<Expression>) | <Operand> | <Subexpression><Binary Operator><Subexpression>
+<Operand>                     ::= <Identifier> | <Constant>
+<Binary Operator>             ::= + | - | *
+
+
+<Constant>                    ::= <Digit> <Constant> | <Digit>
+<Digit>                       ::= 0 | 1 | ... | 9
+
+Maximum Identifier Length - 12
+

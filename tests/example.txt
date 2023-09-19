@@ -1,0 +1,5 @@
+var a,b,c : integer;
+begin
+a=1;
+b=c;
+end
