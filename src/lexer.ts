@@ -2,41 +2,17 @@ const Specifications: [RegExp, string | null][] = [
   // Whitespace:
   [/^\s+/, null],
 
-  // Comments
-  [/^\/\/.*/, null],
-  [/^\/\*[\s\S]*?\*\//, null],
-
-  // Strings
-  [/^"[^"]*"/, "STRING"],
-  [/^'[^']*'/, "STRING"],
-
   // Symbols, delimiters
   [/^;/, ";"],
-  [/^\{/, "{"],
-  [/^\}/, "}"],
   [/^\(/, "("],
   [/^\)/, ")"],
   [/^,/, ","],
-  [/^\./, "."],
-  [/^\[/, "["],
-  [/^\]/, "]"],
+  [/^:/, ":"],
 
   // Keywords
-  [/^\blet\b/, "LET"],
-  [/^\bif\b/, "IF"],
-  [/^\belse\b/, "ELSE"],
-  [/^\btrue\b/, "TRUE"],
-  [/^\bfalse\b/, "FALSE"],
-  [/^\bwhile\b/, "WHILE"],
-  [/^\bdo\b/, "DO"],
-  [/^\bfor\b/, "FOR"],
-  [/^\bdef\b/, "DEF"],
-  [/^\breturn\b/, "RETURN"],
-  [/^\bclass\b/, "CLASS"],
-  [/^\bextends\b/, "EXTENDS"],
-  [/^\bsuper\b/, "SUPER"],
-  [/^\bnew\b/, "NEW"],
-  [/^\bthis\b/, "THIS"],
+  [/^\b(var|VAR)\b/, "VAR"],
+  [/^\b(begin|BEGIN)\b/, "BEGIN"],
+  [/^\b(integer|INTEGER)\b/, "INTEGER"],
 
   // Numbers
   [/^\d+/, "NUMBER"],
@@ -44,67 +20,52 @@ const Specifications: [RegExp, string | null][] = [
   // Identifiers
   [/^\w+/, "IDENTIFIER"],
 
-  // Equality operator
-  [/^[=!]=/, "EQUALITY_OPERATOR"],
-
-  // Assignment operators: =, +=, -=, *=, /=
-  [/^=/, "SIMPLE_ASSIGN"],
-  [/^[\+\-\*\/]=/, "COMPLEX_ASSIGN"],
+  // Assignment operator
+  [/^=/, "ASSIGN"],
 
   // Math operators: +, -, *, /
   [/^[+\-]/, "ADDITIVE_OPERATOR"],
   [/^[*\/]/, "MULTIPLICATIVE_OPERATOR"],
-
-  // Relational operators
-  [/^[><]=?/, "RELATIONAL_OPERATOR"],
-
-  // Logical operators
-  [/^&&/, "LOGICAL_AND"],
-  [/^\|\|/, "LOGICAL_OR"],
-  [/^!/, "LOGICAL_NOT"],
 ];
 
-export class Lexer {
-  private _input: string = "";
-  private _cursor: number = 0;
-  public get cursor(): number {
-    return this._cursor;
+export class TokenLexer {
+  private inputString = "";
+  private cursorPosition = 0;
+
+  public resetInput(input: string): void {
+    this.inputString = input;
+    this.cursorPosition = 0;
   }
 
-  public reset(input: string): void {
-    this._input = input;
-    this._cursor = 0;
-  }
+  public fetchNextToken(): { type: string; value: string } | null {
+    if (this.isEndOfFile()) return null;
 
-  public getNextToken(): { type: string; value: string } | null {
-    if (this.isEOF()) {
-      return null;
+    const substringFromCursor = this.inputString.slice(this.cursorPosition);
+    for (const [pattern, tokenType] of Specifications) {
+      const matchedValue = this.matchPattern(pattern, substringFromCursor);
+
+      // There are no rule for a substring
+      if (matchedValue === null) continue;
+
+      // Skip tokens like whitespace etc.
+      if (tokenType === null) return this.fetchNextToken();
+
+      return { type: tokenType, value: matchedValue };
     }
 
-    const string = this._input.slice(this._cursor);
-    for (const [regex, tokenType] of Specifications) {
-      const tokenValue = this._match(regex, string);
-
-      if (tokenValue === null) continue;
-
-      if (tokenType === null) return this.getNextToken();
-
-      return { type: tokenType, value: tokenValue };
-    }
-
-    throw new SyntaxError(`Unexpected token => ${string[0]}`);
+    throw new SyntaxError(`Unexpected token => ${substringFromCursor[0]}`);
   }
 
-  private _match(regex: RegExp, string: string): string | null {
-    const match = regex.exec(string);
-    if (match === null) return null;
+  private isEndOfFile(): boolean {
+    return this.cursorPosition >= this.inputString.length;
+  }
 
-    const [matchedString] = match;
-    this._cursor += matchedString.length;
+  private matchPattern(pattern: RegExp, targetString: string): string | null {
+    const matchResult = pattern.exec(targetString);
+    if (matchResult === null) return null;
+
+    const [matchedString] = matchResult;
+    this.cursorPosition += matchedString.length;
     return matchedString;
-  }
-
-  public isEOF(): boolean {
-    return this._cursor >= this._input.length;
   }
 }

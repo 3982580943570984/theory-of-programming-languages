@@ -1,23 +1,21 @@
-<Program>                     ::= <Variable Declaration> <Description of Computations>
+Program                 ::= 'VAR' ListOfVariables ':' 'INTEGER' ';' 'BEGIN' ListOfStatements 'END'
+ListOfVariables         ::= Identifier ( ',' Identifier )*
+Identifier              ::= Letter ( Letter )*
+Letter                  ::= 'A' | 'B' | '...' | 'Z'
 
-<Variable Declaration>        ::= VAR <List of Variables> : INTEGER ;
-<List of Variables>           ::= <Identifier> | <Identifier>,<List of Variables>
-<Identifier>                  ::= <Letter> <Identifier> | <Letter>
-<Letter>                      ::= A | B | ... | Z
+ListOfStatements        ::= Statement ( Statement )*
+Statement               ::= Assignment | OPERATOR_READ | OPERATOR_FOR | OPERATOR_WRITE
+Assignment              ::= Identifier '=' Expression ';'
+Expression              ::= UnaryOperator? Subexpression
+UnaryOperator           ::= '-'
+Subexpression           ::= '(' Expression ')' | Operand | Subexpression BinaryOperator Subexpression
+Operand                 ::= Identifier | Constant
+BinaryOperator          ::= '+' | '-' | '*'
 
-<Description of Computations> ::= BEGIN <List of Assignments> END
-<List of Assignments>         ::= <Assignment> | <Assignment> <List of Assignments>
-<Assignment>                  ::= <Identifier> = <Expression>;
-<Identifier>                  ::= <Letter> <Identifier> | <Letter>
-<Expression>                  ::= <Unary Operator> <Subexpression> | <Subexpression>
-<Unary Operator>              ::= -
-<Subexpression>               ::= (<Expression>) | <Operand> | <Subexpression><Binary Operator><Subexpression>
-<Operand>                     ::= <Identifier> | <Constant>
-<Binary Operator>             ::= + | - | *
+Constant                ::= Digit ( Digit )*
+Digit                   ::= '0' | '1' | '...' | '9'
 
-
-<Constant>                    ::= <Digit> <Constant> | <Digit>
-<Digit>                       ::= 0 | 1 | ... | 9
-
-Maximum Identifier Length - 12
+OPERATOR_READ           ::= 'READ' '(' ListOfVariables ')'
+OPERATOR_FOR            ::= 'FOR' Identifier '=' Expression 'TO' Expression 'DO' ListOfStatements 'END_FOR'
+OPERATOR_WRITE          ::= 'WRITE' '(' ListOfVariables ')'
 
