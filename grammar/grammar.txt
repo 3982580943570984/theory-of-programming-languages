@@ -6,14 +6,12 @@ Letter                  ::= 'A' | 'B' | '...' | 'Z'
 ListOfStatements        ::= Statement ( Statement )*
 Statement               ::= Assignment | OPERATOR_READ | OPERATOR_FOR | OPERATOR_WRITE
 Assignment              ::= Identifier '=' Expression ';'
-Expression              ::= UnaryOperator? Subexpression
-UnaryOperator           ::= '-'
+Expression              ::  '-'? Subexpression
 Subexpression           ::= '(' Expression ')' | Operand | Subexpression BinaryOperator Subexpression
 Operand                 ::= Identifier | Constant
-BinaryOperator          ::= '+' | '-' | '*'
-
 Constant                ::= Digit ( Digit )*
 Digit                   ::= '0' | '1' | '...' | '9'
+BinaryOperator          ::= '+' | '-' | '*'
 
 OPERATOR_READ           ::= 'READ' '(' ListOfVariables ')'
 OPERATOR_FOR            ::= 'FOR' Identifier '=' Expression 'TO' Expression 'DO' ListOfStatements 'END_FOR'

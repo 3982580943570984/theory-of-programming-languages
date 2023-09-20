@@ -12,7 +12,15 @@ const Specifications: [RegExp, string | null][] = [
   // Keywords
   [/^\b(var|VAR)\b/, "VAR"],
   [/^\b(begin|BEGIN)\b/, "BEGIN"],
+  [/^\b(end|END)\b/, "END"],
   [/^\b(integer|INTEGER)\b/, "INTEGER"],
+  [/^\b(read|READ)\b/, "READ"],
+  [/^\b(write|WRITE)\b/, "WRITE"],
+  [/^\b(for|FOR)\b/, "FOR"],
+  [/^\b(to|TO)\b/, "TO"],
+  [/^\b(do|DO)\b/, "DO"],
+  [/^\b(end_for|END_FOR)\b/, "END_FOR"],
+
 
   // Numbers
   [/^\d+/, "NUMBER"],
@@ -21,7 +29,7 @@ const Specifications: [RegExp, string | null][] = [
   [/^\w+/, "IDENTIFIER"],
 
   // Assignment operator
-  [/^=/, "ASSIGN"],
+  [/^=/, "ASSIGNMENT_OPERATOR"],
 
   // Math operators: +, -, *, /
   [/^[+\-]/, "ADDITIVE_OPERATOR"],

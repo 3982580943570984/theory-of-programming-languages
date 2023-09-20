@@ -1,12 +1,22 @@
 import * as assert from "assert";
 import { ExpressionParser } from "../src/parser";
-import variableDeclaration from "./variable-declaration";
+import variableDeclarationList from "./variable-declaration-list";
+import statementDeclarationList from "./statement-declaration-list";
 
 const parser = new ExpressionParser();
 
 const exec = () => {
   const program = `
-var a, b, c : integer;
+VAR A, B : INTEGER;
+BEGIN
+  READ(A, B)
+  A = A + B;
+  FOR B = 1 TO 10 DO
+    A = A + 1;
+  END_FOR
+  WRITE(A)
+END
+
 `;
   const ast = parser.parseExpression(program);
   console.log(JSON.stringify(ast, null, 2));
@@ -19,6 +29,7 @@ const test = (program: string, expected: any) => {
   assert.deepStrictEqual(ast, expected);
 };
 
-variableDeclaration(test);
+variableDeclarationList(test);
+statementDeclarationList(test);
 console.log("All assertions passed");
 
