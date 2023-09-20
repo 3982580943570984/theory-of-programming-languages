@@ -5,7 +5,7 @@ export class ExpressionParser {
   private tokenLexer = new TokenLexer();
   private nextToken: { type: string; value: string } | null | undefined;
 
-  private consumeToken(expectedTokenType: string) {//{{{
+  private consumeToken(expectedTokenType: string) { //{{{
     const currentToken = this.nextToken;
 
     if (currentToken == null) {
@@ -23,16 +23,16 @@ export class ExpressionParser {
     this.nextToken = this.tokenLexer.fetchNextToken();
 
     return currentToken;
-  }//}}}
+  } //}}}
 
-  public parseExpression(input: string) {//{{{
+  public parseExpression(input: string) { //{{{
     this.inputString = input;
     this.tokenLexer.resetInput(this.inputString);
     this.nextToken = this.tokenLexer.fetchNextToken();
     return this.Program();
-  }//}}}
+  } //}}}
 
-  public Program() {//{{{
+  public Program() { //{{{
     return {
       type: "Program",
       body: [
@@ -40,9 +40,9 @@ export class ExpressionParser {
         this.StatementDeclarationList(),
       ],
     };
-  }//}}}
+  } //}}}
 
-  public VariableDeclarationList() {//{{{
+  public VariableDeclarationList() { //{{{
     this.consumeToken("VAR");
 
     const variableList = this.VariableList();
@@ -55,28 +55,28 @@ export class ExpressionParser {
       type: "VariableDeclarationList",
       variableList,
     };
-  }//}}}
+  } //}}}
 
-  public VariableList() {
+  public VariableList() {//{{{
     const variableList = [];
     do {
       variableList.push(this.VariableDeclaration());
     } while (this.nextToken.type === "," && this.consumeToken(","));
     return variableList;
-  }
+  }//}}}
 
-  public VariableDeclaration() {
+  public VariableDeclaration() {//{{{
     return this.Identifier();
-  }
+  }//}}}
 
-  public Identifier() {
+  public Identifier() {//{{{
     return {
       type: "Identifier",
       name: this.consumeToken("IDENTIFIER").value,
     };
-  }
+  }//}}}
 
-  public StatementDeclarationList() {
+  public StatementDeclarationList() {//{{{
     this.consumeToken("BEGIN");
 
     const statementList = this.StatementList("END");
@@ -87,17 +87,19 @@ export class ExpressionParser {
       type: "StatementDeclarationList",
       statementList,
     };
-  }
+  }//}}}
 
-  public StatementList(stopStatementList: string = null) {
+  public StatementList(stopStatementList: string = null) {//{{{
     const statementList = [];
     do {
       statementList.push(this.StatementDeclaration());
-    } while (this.nextToken.type !== stopStatementList && this.nextToken.type !== null);
+    } while (
+      this.nextToken.type !== stopStatementList && this.nextToken.type !== null
+    );
     return statementList;
-  }
+  }//}}}
 
-  public StatementDeclaration() {
+  public StatementDeclaration() {//{{{
     switch (this.nextToken.type) {
       case "READ":
         return this.ReadStatement();
@@ -109,11 +111,11 @@ export class ExpressionParser {
         return this.WriteStatement();
 
       default:
-        return this.AssignmentStatement();
+        return this.ExpressionStatement();
     }
-  }
+  }//}}}
 
-  public ReadStatement() {
+  public ReadStatement() { //{{{
     this.consumeToken("READ");
     this.consumeToken("(");
     const variableList = this.VariableList();
@@ -122,11 +124,11 @@ export class ExpressionParser {
       type: "ReadStatement",
       variableList,
     };
-  }
+  } //}}}
 
-  public ForStatement() {
+  public ForStatement() { //{{{
     this.consumeToken("FOR");
-    const loopInitializer = this.AssignmentStatement(false);
+    const loopInitializer = this.Expression();
 
     this.consumeToken("TO");
     const constraint = this.Expression();
@@ -142,9 +144,9 @@ export class ExpressionParser {
       constraint,
       statementList,
     };
-  }
+  } //}}}
 
-  public WriteStatement() {
+  public WriteStatement() { //{{{
     this.consumeToken("WRITE");
     this.consumeToken("(");
     const variableList = this.VariableList();
@@ -153,86 +155,113 @@ export class ExpressionParser {
       type: "WriteStatement",
       variableList,
     };
-  }
+  } //}}}
 
-  public AssignmentStatement(consumeSemicolon: boolean = true) {
-    const identifier = this.Identifier();
-    this.consumeToken("ASSIGNMENT_OPERATOR");
+  public ExpressionStatement() {//{{{
     const expression = this.Expression();
-    if (consumeSemicolon) {
-      this.consumeToken(";");
-    }
+    this.consumeToken(";");
     return {
-      type: "AssignmentStatement",
-      identifier,
+      type: "ExpressionStatement",
       expression,
     };
-  }
+  }//}}}
 
-  public Expression() {
-    let negate = false;
-    if (this.nextToken.type === "ADDITIVE_OPERATOR") {
-      this.consumeToken("ADDITIVE_OPERATOR");
-      negate = true;
-    }
+  public Expression() {//{{{
+    return this.AssignmentExpression();
+  }//}}}
 
-    const subexpression = this.Subexpression();
+  public AssignmentExpression() {//{{{
+    const left = this.AdditiveExpression();
+
+    const isAssignmentOperator = (type: string) => type === "ASSIGNMENT_OPERATOR";
+    if (!isAssignmentOperator(this.nextToken.type)) return left;
+
+    const checkValidAssignmentTarget = (node: { type: string }) => { //{{{
+      if (node.type === "Identifier") {
+        return node;
+      }
+      throw new SyntaxError(`Invalid left-hand side in assignment expression`);
+    }; //}}}
 
     return {
-      type: "Expression",
-      negate,
-      subexpression,
+      type: "assignmentExpression",
+      operator: this.consumeToken("ASSIGNMENT_OPERATOR").value,
+      left: checkValidAssignmentTarget(left),
+      right: this.AssignmentExpression(),
     };
-  }
+  }//}}}
 
-  public Subexpression() {
-    if (this.nextToken.type === "(") {
-      this.consumeToken("(");
-      const expr = this.Expression();
-      this.consumeToken(")");
-      return expr;
-    }
-
-    const left = this.Operand();
-
-    if (
-      ["ADDITIVE_OPERATOR", "MULTIPLICATIVE_OPERATOR"].includes(
-        this.nextToken.type,
-      )
-    ) {
-      const operator = this.BinaryOperator();
-      const right = this.Subexpression();
-      return {
+  public BinaryExpression(builderName: string, operatorToken: string) {//{{{
+    let left: any = this[builderName]();
+    while (this.nextToken.type === operatorToken) {
+      const operator = this.consumeToken(operatorToken).value;
+      const right = this[builderName]();
+      left = {
         type: "BinaryExpression",
-        left,
         operator,
+        left,
         right,
       };
     }
-
     return left;
-  }
+  }//}}}
 
-  public Operand() {
-    if (this.nextToken.type === "IDENTIFIER") {
-      return this.Identifier();
-    } else if (this.nextToken.type === "NUMBER") {
-      return this.Constant();
+  public AdditiveExpression() {//{{{
+    return this.BinaryExpression("MultiplicativeExpression", "ADDITIVE_OPERATOR");
+  }//}}}
+
+  public MultiplicativeExpression() {//{{{
+    return this.BinaryExpression("UnaryExpression", "MULTIPLICATIVE_OPERATOR");
+  }//}}}
+
+  public UnaryExpression() {//{{{
+    let operator = null;
+
+    if (this.nextToken.type === "ADDITIVE_OPERATOR") {
+      operator = this.consumeToken("ADDITIVE_OPERATOR").value;
     }
 
-    throw new SyntaxError(`Unexpected token => "${this.nextToken?.value}"`);
-  }
+    if (operator !== null) {
+      return {
+        type: "UnaryExpression",
+        operator,
+        argument: this.UnaryExpression(),
+      };
+    }
 
-  public Constant() {
-    const value = this.consumeToken("NUMBER").value;
+    return this.PrimaryExpression();
+  }//}}}
+
+  public PrimaryExpression() {//{{{
+    const isLiteral = (type: string) => type === "NUMBER";
+    if (isLiteral(this.nextToken.type)) return this.Literal();
+
+    switch (this.nextToken.type) {
+      case "(":
+        return this.ParenthesizedExpression();
+      case "IDENTIFIER":
+        return this.Identifier();
+      default:
+        return this.PrimaryExpression();
+    }
+  }//}}}
+
+  public ParenthesizedExpression() {//{{{
+    this.consumeToken("(");
+    const expression = this.Expression();
+    this.consumeToken(")");
+    return expression;
+  }//}}}
+
+  public Literal() {//{{{
+    return this.NumericLiteral();
+  }//}}}
+
+  public NumericLiteral() {//{{{
+    const number = this.consumeToken("NUMBER").value;
     return {
-      type: "NumberLiteral",
-      value,
-    };
-  }
-
-  public BinaryOperator() {
-    const operator = this.consumeToken(this.nextToken.type).value;
-    return operator;
-  }
+      type: "NumericLiteral",
+      value: Number(number),
+    }
+  }//}}}
 }

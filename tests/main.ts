@@ -9,14 +9,9 @@ const exec = () => {
   const program = `
 VAR A, B : INTEGER;
 BEGIN
-  READ(A, B)
-  A = A + B;
-  FOR B = 1 TO 10 DO
-    A = A + 1;
-  END_FOR
+  A = -(((A - B)) + ((A + B)));
   WRITE(A)
 END
-
 `;
   const ast = parser.parseExpression(program);
   console.log(JSON.stringify(ast, null, 2));
