@@ -5,7 +5,7 @@ export class ExpressionParser {
   private tokenLexer = new TokenLexer();
   private nextToken: { type: string; value: string } | null | undefined;
 
-  private consumeToken(expectedTokenType: string) {
+  private consumeToken(expectedTokenType: string) {//{{{
     const currentToken = this.nextToken;
 
     if (currentToken == null) {
@@ -23,16 +23,16 @@ export class ExpressionParser {
     this.nextToken = this.tokenLexer.fetchNextToken();
 
     return currentToken;
-  }
+  }//}}}
 
-  public parseExpression(input: string) {
+  public parseExpression(input: string) {//{{{
     this.inputString = input;
     this.tokenLexer.resetInput(this.inputString);
     this.nextToken = this.tokenLexer.fetchNextToken();
     return this.Program();
-  }
+  }//}}}
 
-  public Program() {
+  public Program() {//{{{
     return {
       type: "Program",
       body: [
@@ -40,9 +40,9 @@ export class ExpressionParser {
         this.StatementDeclarationList(),
       ],
     };
-  }
+  }//}}}
 
-  public VariableDeclarationList() {
+  public VariableDeclarationList() {//{{{
     this.consumeToken("VAR");
 
     const variableList = this.VariableList();
@@ -55,7 +55,7 @@ export class ExpressionParser {
       type: "VariableDeclarationList",
       variableList,
     };
-  }
+  }//}}}
 
   public VariableList() {
     const variableList = [];
