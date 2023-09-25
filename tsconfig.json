@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES2022",
     "module": "commonjs",
     "outDir": "dist"
   },
   "include": [
     "src/**/*.ts",
     "tests/**/*.ts",
-    "bin/**/*.ts"
+    "bin/**/*.ts",
+    "./index.ts"
   ],
   "exclude": [
     "node_modules"

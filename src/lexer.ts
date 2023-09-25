@@ -3,14 +3,14 @@ const Specifications: [RegExp, string | null][] = [
   [/^\s+/, null],
 
   // Symbols, delimiters
-  [/^;/, ";"],
+  [/^;/, ";"],//{{{
   [/^\(/, "("],
   [/^\)/, ")"],
   [/^,/, ","],
-  [/^:/, ":"],
+  [/^:/, ":"],//}}}
 
   // Keywords
-  [/^\b(var|VAR)\b/, "VAR"],
+  [/^\b(var|VAR)\b/, "VAR"],//{{{
   [/^\b(begin|BEGIN)\b/, "BEGIN"],
   [/^\b(end|END)\b/, "END"],
   [/^\b(integer|INTEGER)\b/, "INTEGER"],
@@ -19,11 +19,14 @@ const Specifications: [RegExp, string | null][] = [
   [/^\b(for|FOR)\b/, "FOR"],
   [/^\b(to|TO)\b/, "TO"],
   [/^\b(do|DO)\b/, "DO"],
-  [/^\b(end_for|END_FOR)\b/, "END_FOR"],
+  [/^\b(end_for|END_FOR)\b/, "END_FOR"],//}}}
 
 
   // Numbers
   [/^\d+/, "NUMBER"],
+
+  // Strings
+  [/^"[^"]*"/, "STRING"],
 
   // Identifiers
   [/^\w+/, "IDENTIFIER"],
@@ -32,20 +35,20 @@ const Specifications: [RegExp, string | null][] = [
   [/^=/, "ASSIGNMENT_OPERATOR"],
 
   // Math operators: +, -, *, /
-  [/^[+\-]/, "ADDITIVE_OPERATOR"],
-  [/^[*\/]/, "MULTIPLICATIVE_OPERATOR"],
+  [/^[+\-]/, "ADDITIVE_OPERATOR"],//{{{
+  [/^[*\/]/, "MULTIPLICATIVE_OPERATOR"],//}}}
 ];
 
 export class TokenLexer {
   private inputString = "";
   private cursorPosition = 0;
 
-  public resetInput(input: string): void {
+  public resetInput(input: string): void {//{{{
     this.inputString = input;
     this.cursorPosition = 0;
-  }
+  }//}}}
 
-  public fetchNextToken(): { type: string; value: string } | null {
+  public fetchNextToken(): { type: string; value: string } | null {//{{{
     if (this.isEndOfFile()) return null;
 
     const substringFromCursor = this.inputString.slice(this.cursorPosition);
@@ -62,18 +65,18 @@ export class TokenLexer {
     }
 
     throw new SyntaxError(`Unexpected token => ${substringFromCursor[0]}`);
-  }
+  }//}}}
 
-  private isEndOfFile(): boolean {
+  private isEndOfFile(): boolean {//{{{
     return this.cursorPosition >= this.inputString.length;
-  }
+  }//}}}
 
-  private matchPattern(pattern: RegExp, targetString: string): string | null {
+  private matchPattern(pattern: RegExp, targetString: string): string | null {//{{{
     const matchResult = pattern.exec(targetString);
     if (matchResult === null) return null;
 
     const [matchedString] = matchResult;
     this.cursorPosition += matchedString.length;
     return matchedString;
-  }
+  }//}}}
 }
