@@ -7,7 +7,8 @@ ListOfStatements        ::= Statement ( Statement )*
 Statement               ::= Assignment | OPERATOR_READ | OPERATOR_FOR | OPERATOR_WRITE
 Assignment              ::= Identifier '=' Expression ';'
 Expression              ::  '-'? Subexpression
-Subexpression           ::= '(' Expression ')' | Operand | Subexpression BinaryOperator Subexpression
+Subexpression           ::= '(' Expression ')' | Operand | NonRecursiveSubexpr
+NonRecursiveSubexpr     ::= Subexpression BinaryOperator Subexpression
 Operand                 ::= Identifier | Constant
 Constant                ::= Digit ( Digit )*
 Digit                   ::= '0' | '1' | '...' | '9'
